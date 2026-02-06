@@ -95,14 +95,14 @@ static DnsCacheEntry *new_dns_cache_entry(char *hostname, struct addrinfo *cur_a
 
     memcpy(new_entry->res, cur_ai, sizeof(struct addrinfo));
 
-    new_entry->res->ai_addr = (struct sockaddr *) av_mallocz(sizeof(struct sockaddr));
+    new_entry->res->ai_addr = (struct sockaddr *) av_mallocz(cur_ai->ai_addrlen);
     if (!new_entry->res->ai_addr) {
         av_freep(&new_entry->res);
         av_freep(&new_entry);
         goto fail;
     }
 
-    memcpy(new_entry->res->ai_addr, cur_ai->ai_addr, sizeof(struct sockaddr));
+    memcpy(new_entry->res->ai_addr, cur_ai->ai_addr, cur_ai->ai_addrlen);
     new_entry->res->ai_canonname = NULL;
     new_entry->res->ai_next      = NULL;
     new_entry->ref_count         = 0;
